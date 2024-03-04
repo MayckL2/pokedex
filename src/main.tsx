@@ -25,7 +25,7 @@ const router = createBrowserRouter([
     element: <Types/>,
   },
   {
-    path: "/habitats",
+    path: "/habitats/:page?",
     element: <Habitats/>,
   },
   {

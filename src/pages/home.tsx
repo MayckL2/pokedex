@@ -16,7 +16,7 @@ export default function Home() {
     const [pesquisa, setPesquisa] = useState('')
     const [load, setLoad] = useState(false)
     const [notFound, setNotFound] = useState(false)
-
+    
     // Carregar pokemons da api
     async function loadPokemons(page = '') {
         // habilita carregamento e se caso nada for encontrado

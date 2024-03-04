@@ -6,6 +6,7 @@ import { Pokemon, choseColor } from '../components/pokemon';
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 import Footer from '../components/footer';
 import { toast, Bounce, ToastContainer } from 'react-toastify';
+import { useNavigate, useParams } from "react-router-dom";
 
 type habitatType = {
     name: string,
@@ -17,8 +18,9 @@ export default function Types() {
     const [tab, setTab] = useState('')
     const [pokemons, setPokemons] = useState<Array<PokemonType>>([])
     const [loaded, setLoaded] = useState(false)
-    const [pagination, setPagination] = useState(1)
     const [erro, setErro] = useState(false)
+    const navigate = useNavigate();
+    const { page } = useParams()
 
     // carrega tipos, pesquisa por padrão pokemons tipo 'normal' e reseta paginação
     async function loadTypes() {
@@ -26,12 +28,12 @@ export default function Types() {
         console.log(response.results)
         setChoices(response.results)
         setTab('normal')
-        setPagination(1)
-        pokemonFromType('normal')
+        pokemonFromType('normal', Number(page))
     }
 
     // Carrega todos os pokemons dos tipos correspondentes
     async function pokemonFromType(name: string, pagination: number = 1) {
+        navigate(`/types/${pagination}`)
         setLoaded(false)
         setPokemons([])
         let response = await getTypes(name)
@@ -58,8 +60,7 @@ export default function Types() {
 
     // reseta paginação e pesquisa pela categoria correspondente
     useEffect(() => {
-        setPagination(1)
-        pokemonFromType(tab)
+        pokemonFromType(tab, Number(page))
     }, [tab])
 
     // Ao iniciar a pagina, carrega tipos, pesquisa por padrão pokemons tipo 'normal' e reseta paginação
@@ -69,15 +70,13 @@ export default function Types() {
 
     // passa para proxima pagina de pokemons
     function handleNext() {
-        pokemonFromType(tab, pagination + 1)
-        setPagination(prev => prev + 1)
+        pokemonFromType(tab, Number(page) + 1)
     }
 
     // volta para pagina anterior de pokemons
     function handlePrevious() {
-        if(pagination > 1){
-            pokemonFromType(tab, pagination - 1)
-            setPagination(prev => prev - 1)
+        if(Number(page) > 1){
+            pokemonFromType(tab, Number(page) - 1)
         }else{
             toast.warning('It no pages to come back...', {
                 position: "bottom-right",

@@ -1,5 +1,5 @@
 import { FaHome } from "react-icons/fa"
-import { Link, useParams } from "react-router-dom"
+import { useParams } from "react-router-dom"
 import { PokemonType, getPokemon } from "../services/api"
 import { useEffect, useState } from "react"
 import { choseColor } from "../components/pokemon"

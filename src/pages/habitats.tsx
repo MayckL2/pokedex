@@ -6,6 +6,7 @@ import { Pokemon } from '../components/pokemon';
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 import Footer from '../components/footer';
 import { toast, Bounce, ToastContainer } from 'react-toastify';
+import { useNavigate, useParams } from "react-router-dom";
 
 type habitatType = {
     name: string,
@@ -16,9 +17,10 @@ export default function Habitats() {
     const [choices, setChoices] = useState<Array<habitatType>>([])
     const [tab, setTab] = useState('')
     const [pokemons, setPokemons] = useState<Array<PokemonType>>([])
-    const [pagination, setPagination] = useState(1)
     const [erro, setErro] = useState(false)
     const [loaded, setLoaded] = useState(false)
+    const navigate = useNavigate();
+    const { page } = useParams()
 
     // Carrega todos os habitates
     async function loadHabitats() {
@@ -29,6 +31,7 @@ export default function Habitats() {
 
     // Chama pokemons pertencentes a determinado habitate
     async function pokemonFromHabitats(name: string, pagination: number = 1) {
+        navigate(`/habitats/${pagination}`)
         setLoaded(false)
         let response = await getHabitats(name)
         console.log(response)
@@ -51,29 +54,25 @@ export default function Habitats() {
 
     // coleta pokemons por habitate correspondente
     useEffect(() => {
-        pokemonFromHabitats(tab)
-        setPagination(1)
+        pokemonFromHabitats(tab, Number(page))
     }, [tab])
 
     // carrega habitates e chama por padrão pokemon prertencentes caverna
     useEffect(() => {
         loadHabitats()
         setTab('cave')
-        pokemonFromHabitats('cave')
-        setPagination(1)
+        pokemonFromHabitats('cave', Number(page))
     }, [])
 
     // passa para proxima pagina de pokemons
     function handleNext(): void {
-        pokemonFromHabitats(tab, pagination + 1)
-        setPagination(prev => prev + 1)
+        pokemonFromHabitats(tab, Number(page) + 1)
     }
 
     // volta para pagina anterior de pokemons
     function handlePrevious(): void {
-        if (pagination > 1) {
-            pokemonFromHabitats(tab, pagination - 1)
-            setPagination(prev => prev - 1)
+        if (Number(page) > 1) {
+            pokemonFromHabitats(tab, Number(page) - 1)
         } else {
             toast.warning('It no pages to come back...', {
                 position: "bottom-right",

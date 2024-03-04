@@ -21,10 +21,10 @@ export default function Header() {
                         <Link to={'/'}>Home</Link>
                     </Tabs.Trigger>
                     <Tabs.Trigger value="habitats" className={`${tab == 'habitats' ? 'border-yellow-500 text-yellow-500' : 'border-transparent'} border-b-2 transition-all p-2 font-bold text-lg`}>
-                        <Link to={'/habitats'}>Habitats</Link>
+                        <Link to={'/habitats/1'}>Habitats</Link>
                     </Tabs.Trigger>
                     <Tabs.Trigger value="types" className={`${tab == 'types' ? 'border-yellow-500 text-yellow-500' : 'border-transparent'} border-b-2 transition-all p-2 font-bold text-lg`}>
-                        <Link to={'/types'}>Types</Link>
+                        <Link to={'/types/1'}>Types</Link>
                     </Tabs.Trigger>
                     <Tabs.Trigger value="about" className={`${tab == 'about' ? 'border-yellow-500 text-yellow-500' : 'border-transparent'} border-b-2 transition-all p-2 font-bold text-lg`}>
                         <Link to={'/about'}>About</Link>
