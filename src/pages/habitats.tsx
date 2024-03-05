@@ -34,16 +34,16 @@ export default function Habitats() {
         navigate(`/habitats/${pagination}`)
         setLoaded(false)
         let response = await getHabitats(name)
-        console.log(response)
         let pokemons = []
         // pega dados mais especificos dos pokemons pelo nome e salva em um array
         for (let i = 0; i < 20; i++) {
             if (response.pokemon_species[i * pagination]) {
                 let data = await getPokemon(response.pokemon_species[i * pagination].name)
-                if(data) pokemons.push(data)
+                if (data) pokemons.push(data)
                 data = {}
             }
         }
+        console.log(pokemons.length)
         if (pokemons.length == 0) {
             setErro(true)
         } else {
@@ -54,7 +54,8 @@ export default function Habitats() {
 
     // coleta pokemons por habitate correspondente
     useEffect(() => {
-        pokemonFromHabitats(tab, Number(page))
+        navigate(`/habitats/1`)
+        pokemonFromHabitats(tab)
     }, [tab])
 
     // carrega habitates e chama por padrão pokemon prertencentes caverna
@@ -123,9 +124,9 @@ export default function Habitats() {
             <main className={`flex flex-col justify-center items-center gap-8 rounded-xl bg-sky-700/40`}>
                 <Tabs.Root defaultValue="cave" onValueChange={(e) => setTab(e)} className='w-full'>
                     <Tabs.List>
-                        <div className='w-full p-4 border-2 rounded-t-xl flex justify-center items-center flex-wrap'>
+                        <div className='w-full p-4 border-2 rounded-t-xl grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4'>
                             {choices?.length > 0 && choices.map((value: habitatType, key: number) => (
-                                <Tabs.Trigger value={value.name} key={key} className={`${tab == value.name ? 'border-yellow-500 text-yellow-500' : 'border-transparent'} border-b-2 transition-all capitalize p-2 font-bold text-base`}>
+                                <Tabs.Trigger value={value.name} key={key} className={`${tab == value.name ? 'bg-sky-500 border-yellow-500' : 'border-white'} border-2 rounded-full transition-all capitalize p-2 font-bold text-base`}>
                                     {value.name}
                                 </Tabs.Trigger>
                             ))}
@@ -150,8 +151,8 @@ export default function Habitats() {
                                 <>
                                     <div className='flex gap-4 mb-4'>
                                         {/* Se preenchido, botão é exibido */}
-                                        <button className='p-2 rounded-lg bg-sky-600 hover:bg-yellow-500 font-bold text-lg transition-all flex gap-2 items-center' onClick={handleNext}>Next <FaArrowRight /></button>
-                                        <button className='p-2 rounded-lg bg-sky-600 hover:bg-yellow-500 font-bold text-lg transition-all flex gap-2 items-center' onClick={handlePrevious}><FaArrowLeft /> Previous</button>
+                                        {pokemons.length == 20 && <button className='p-2 rounded-lg bg-sky-600 hover:bg-yellow-500 font-bold text-lg transition-all flex gap-2 items-center' onClick={handleNext}>Next <FaArrowRight /></button>}
+                                        {Number(page) > 1  && <button className='p-2 rounded-lg bg-sky-600 hover:bg-yellow-500 font-bold text-lg transition-all flex gap-2 items-center' onClick={handlePrevious}><FaArrowLeft /> Previous</button>}
                                     </div>
                                     <Pokemon data={pokemons} />
                                 </>
@@ -164,6 +165,6 @@ export default function Habitats() {
             </main>
         </div>
 
-        <Footer/>
+        <Footer />
     </>)
 }

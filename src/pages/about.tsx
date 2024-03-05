@@ -51,6 +51,7 @@ export default function About() {
                     </div>
 
                     <Social/>
+                    
                 </section>
             </div>
         </main>

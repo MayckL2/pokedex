@@ -7,6 +7,11 @@ import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 import Footer from '../components/footer';
 import { toast, Bounce, ToastContainer } from 'react-toastify';
 import { useNavigate, useParams } from "react-router-dom";
+import Box from '@mui/material/Box';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
 
 type habitatType = {
     name: string,
@@ -21,6 +26,12 @@ export default function Types() {
     const [erro, setErro] = useState(false)
     const navigate = useNavigate();
     const { page } = useParams()
+    const [age, setAge] = useState('');
+
+    const handleChange = (event: SelectChangeEvent) => {
+        setTab(event.target.value);
+        console.log(event.target.value)
+    };
 
     // carrega tipos, pesquisa por padrão pokemons tipo 'normal' e reseta paginação
     async function loadTypes() {
@@ -34,6 +45,7 @@ export default function Types() {
     // Carrega todos os pokemons dos tipos correspondentes
     async function pokemonFromType(name: string, pagination: number = 1) {
         navigate(`/types/${pagination}`)
+        setErro(false)
         setLoaded(false)
         setPokemons([])
         let response = await getTypes(name)
@@ -60,7 +72,9 @@ export default function Types() {
 
     // reseta paginação e pesquisa pela categoria correspondente
     useEffect(() => {
-        pokemonFromType(tab, Number(page))
+        console.log(tab)
+        navigate(`/types/1`)
+        pokemonFromType(tab)
     }, [tab])
 
     // Ao iniciar a pagina, carrega tipos, pesquisa por padrão pokemons tipo 'normal' e reseta paginação
@@ -75,9 +89,9 @@ export default function Types() {
 
     // volta para pagina anterior de pokemons
     function handlePrevious() {
-        if(Number(page) > 1){
+        if (Number(page) > 1) {
             pokemonFromType(tab, Number(page) - 1)
-        }else{
+        } else {
             toast.warning('It no pages to come back...', {
                 position: "bottom-right",
                 autoClose: 5000,
@@ -97,16 +111,20 @@ export default function Types() {
         <ToastContainer />
 
         <main className='min-h-screen'>
+
+
             <div className='flex flex-col justify-center items-center gap-8 m-8 rounded-xl bg-sky-700'>
                 <Tabs.Root defaultValue="normal" onValueChange={(e) => setTab(e)} className='w-full'>
                     <Tabs.List>
-                        <div className='w-full p-4 border-2 rounded-t-xl flex justify-center items-center flex-wrap'>
+                        <div className='w-full p-4 border-2 rounded-t-xl grid grid-cols-3 md:grid-cols-5 lg:grid-cols-10 gap-4'>
                             {choices?.length > 0 && choices.map((value: habitatType, key: number) => (
-                                <Tabs.Trigger value={value.name} key={key} className={`${tab == value.name ? `${choseColor('type', value.name)} border-yellow-500` : 'border-transparent'} rounded-t-lg border-b-2 transition-all capitalize p-2 font-bold text-base`}>
+                                <Tabs.Trigger value={value.name} key={key} className={`${tab == value.name ? `${choseColor('type', value.name)} border-yellow-500` : 'border-white'} rounded-3xl border-2 transition-all capitalize p-2 font-bold text-base`}>
                                     {value.name}
                                 </Tabs.Trigger>
                             ))}
                         </div>
+
+
                     </Tabs.List>
 
                     <section className='p-4 border-x-2 border-b-2 rounded-b-xl'>
@@ -127,8 +145,8 @@ export default function Types() {
                                 <>
                                     <div className='flex gap-4 mb-4'>
                                         {/* Se preenchido, botão é exibido */}
-                                        <button className='p-2 rounded-lg bg-sky-600 hover:bg-yellow-500 font-bold text-lg transition-all flex gap-2 items-center' onClick={handleNext}>Next <FaArrowRight /></button>
-                                        <button className='p-2 rounded-lg bg-sky-600 hover:bg-yellow-500 font-bold text-lg transition-all flex gap-2 items-center' onClick={handlePrevious}><FaArrowLeft /> Previous</button>
+                                        {pokemons.length == 20 && <button className='p-2 rounded-lg bg-sky-600 hover:bg-yellow-500 font-bold text-lg transition-all flex gap-2 items-center' onClick={handleNext}>Next <FaArrowRight /></button>}
+                                        {Number(page) > 1 && <button className='p-2 rounded-lg bg-sky-600 hover:bg-yellow-500 font-bold text-lg transition-all flex gap-2 items-center' onClick={handlePrevious}><FaArrowLeft /> Previous</button>}
                                     </div>
                                     <Pokemon data={pokemons} />
                                 </>
