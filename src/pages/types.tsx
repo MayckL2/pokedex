@@ -7,11 +7,6 @@ import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 import Footer from '../components/footer';
 import { toast, Bounce, ToastContainer } from 'react-toastify';
 import { useNavigate, useParams } from "react-router-dom";
-import Box from '@mui/material/Box';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
 
 type habitatType = {
     name: string,
@@ -26,12 +21,6 @@ export default function Types() {
     const [erro, setErro] = useState(false)
     const navigate = useNavigate();
     const { page } = useParams()
-    const [age, setAge] = useState('');
-
-    const handleChange = (event: SelectChangeEvent) => {
-        setTab(event.target.value);
-        console.log(event.target.value)
-    };
 
     // carrega tipos, pesquisa por padrão pokemons tipo 'normal' e reseta paginação
     async function loadTypes() {
