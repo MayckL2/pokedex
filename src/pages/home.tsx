@@ -8,6 +8,7 @@ import Header from '../components/header'
 import { Bounce, ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Footer from '../components/footer'
+import Gif from '../assets/gif.gif'
 
 export default function Home() {
     const { scrollYProgress } = useScroll()
@@ -16,7 +17,8 @@ export default function Home() {
     const [pesquisa, setPesquisa] = useState('')
     const [load, setLoad] = useState(false)
     const [notFound, setNotFound] = useState(false)
-    
+    const [pageLoad, setPageLoad] = useState(false)
+
     // Carregar pokemons da api
     async function loadPokemons(page = '') {
         // habilita carregamento e se caso nada for encontrado
@@ -35,6 +37,7 @@ export default function Home() {
         setData(pokemons)
         setLoad(true)
         setNotFound(false)
+        setPageLoad(true)
     }
 
     // pesquisa pelo nome do pokemon
@@ -75,11 +78,11 @@ export default function Home() {
     }, [])
 
     // mostrar todos os pokemons quando campo de pesquisa estiver vazio
-    useEffect(()=>{
-        if(pesquisa == ''){
+    useEffect(() => {
+        if (pesquisa == '') {
             loadPokemons()
         }
-    },[pesquisa])
+    }, [pesquisa])
 
     // passa para proxima pagina de pokemons
     function handleNext(): void {
@@ -107,6 +110,15 @@ export default function Home() {
 
     return (
         <>
+            {!pageLoad && <div className='absolute w-full h-screen z-10 bg-sky-500'>
+                <div className="absolute top-20 left-[10%] font-pokemon text-end flex flex-col gap-8">
+                    <p className='text-6xl sm:text-8xl'>Pokedex</p>
+                    <span>made by Mayck Luciano</span>
+                </div>
+                <img className='absolute right-0 bottom-0' src={Gif} alt='Carregamento' />
+            </div>
+            }
+
             <Header />
             <ToastContainer />
 
@@ -150,7 +162,7 @@ export default function Home() {
                 </div>
             </main>
 
-            <Footer/>
+            <Footer />
         </>
     )
 }
